@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>JONY Secure Dashboard</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  min-height:100vh;
+  font-family:Arial,sans-serif;
+  background:#05070b;
+  color:#fff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.container{
+  width:min(420px,92%);
+}
+
+.card{
+  background:#0d1118;
+  border:1px solid #202936;
+  border-radius:20px;
+  padding:28px;
+  box-shadow:0 15px 50px rgba(0,0,0,.45);
+}
+
+.logo{
+  text-align:center;
+  font-size:30px;
+  font-weight:bold;
+  margin-bottom:8px;
+}
+
+.logo span{
+  color:#00e5ff;
+}
+
+.subtitle{
+  text-align:center;
+  color:#8993a4;
+  font-size:14px;
+  margin-bottom:25px;
+}
+
+input{
+  width:100%;
+  padding:14px;
+  margin-bottom:13px;
+  border-radius:10px;
+  border:1px solid #293241;
+  background:#080b10;
+  color:#fff;
+  outline:none;
+  font-size:15px;
+}
+
+input:focus{
+  border-color:#00e5ff;
+}
+
+button{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:10px;
+  background:#00c8e8;
+  color:#001014;
+  font-weight:bold;
+  font-size:15px;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:.9;
+}
+
+.error{
+  color:#ff6577;
+  font-size:13px;
+  margin-bottom:12px;
+  display:none;
+  text-align:center;
+}
+
+.dashboard{
+  display:none;
+  width:min(700px,94%);
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+
+.header h2{
+  font-size:23px;
+}
+
+.logout{
+  width:auto;
+  padding:9px 14px;
+  background:#202733;
+  color:#fff;
+}
+
+.status{
+  background:#0d1118;
+  border:1px solid #202936;
+  border-radius:18px;
+  padding:22px;
+  margin-bottom:15px;
+}
+
+.status-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:16px;
+}
+
+.dot{
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:#ffb020;
+}
+
+.phone-name{
+  font-size:20px;
+  font-weight:bold;
+}
+
+.info{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+
+.info-box{
+  background:#080b10;
+  border-radius:12px;
+  padding:15px;
+}
+
+.label{
+  color:#7e899b;
+  font-size:12px;
+  margin-bottom:5px;
+}
+
+.value{
+  font-size:14px;
+}
+
+.connect{
+  margin-top:16px;
+}
+
+.note{
+  margin-top:18px;
+  color:#7e899b;
+  font-size:12px;
+  line-height:1.5;
+  text-align:center;
+}
+
+.hidden{
+  display:none;
+}
+
+@media(max-width:500px){
+  .info{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div class="container" id="loginPage">
+
+  <div class="card">
+
+    <div class="logo">
+      JONY <span>SECURE</span>
+    </div>
+
+    <div class="subtitle">
+      Secure Phone Dashboard
+    </div>
+
+    <div class="error" id="error">
+      Invalid username or password
+    </div>
+
+    <input
+      type="text"
+      id="username"
+      placeholder="Username"
+      autocomplete="username"
+    >
+
+    <input
+      type="password"
+      id="password"
+      placeholder="Password"
+      autocomplete="current-password"
+    >
+
+    <button onclick="login()">
+      LOGIN
+    </button>
+
+    <div class="note">
+      Demo login: admin / 1234
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- DASHBOARD -->
+<div class="dashboard" id="dashboard">
+
+  <div class="header">
+
+    <h2>JONY Dashboard</h2>
+
+    <button class="logout" onclick="logout()">
+      Logout
+    </button>
+
+  </div>
+
+
+  <div class="status">
+
+    <div class="status-title">
+
+      <div class="dot" id="statusDot"></div>
+
+      <div class="phone-name">
+        My Phone
+      </div>
+
+    </div>
+
+
+    <div class="info">
+
+      <div class="info-box">
+        <div class="label">CONNECTION</div>
+        <div class="value" id="connection">
+          Not Connected
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="label">DEVICE</div>
+        <div class="value">
+          Waiting for phone
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="label">SECURITY</div>
+        <div class="value">
+          Authentication Required
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="label">ACCESS</div>
+        <div class="value">
+          Permission Required
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="connect">
+
+      <button onclick="connectPhone()">
+        CONNECT MY PHONE
+      </button>
+
+    </div>
+
+  </div>
+
+
+  <div class="status">
+
+    <div class="status-title">
+      <div class="phone-name">
+        Available Features
+      </div>
+    </div>
+
+    <div class="info">
+
+      <div class="info-box">
+        <div class="label">📱 SCREEN</div>
+        <div class="value">
+          Not connected
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="label">📁 FILES</div>
+        <div class="value">
+          Not connected
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="label">🔔 STATUS</div>
+        <div class="value">
+          Not connected
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="label">⚙️ DEVICE</div>
+        <div class="value">
+          Permission required
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="note">
+    Only your own device should be connected.
+    Phone permissions will be required before accessing device data.
+  </div>
+
+</div>
+
+
+<script>
+
+function login(){
+
+  const username =
+    document.getElementById("username").value.trim();
+
+  const password =
+    document.getElementById("password").value;
+
+  const error =
+    document.getElementById("error");
+
+
+  // DEMO ONLY
+  // Do not use this hardcoded password
+  // for a real website.
+
+  if(username === "mrjony127" && password === "145251"){
+
+    error.style.display = "none";
+
+    document.getElementById("loginPage")
+      .style.display = "none";
+
+    document.getElementById("dashboard")
+      .style.display = "block";
+
+  }else{
+
+    error.style.display = "block";
+
+  }
+
+}
+
+
+function logout(){
+
+  document.getElementById("dashboard")
+    .style.display = "none";
+
+  document.getElementById("loginPage")
+    .style.display = "block";
+
+  document.getElementById("username").value = "";
+  document.getElementById("password").value = "";
+
+}
+
+
+function connectPhone(){
+
+  const connection =
+    document.getElementById("connection");
+
+  const dot =
+    document.getElementById("statusDot");
+
+
+  connection.textContent =
+    "Waiting for phone permission...";
+
+  dot.style.background =
+    "#ffb020";
+
+
+  setTimeout(function(){
+
+    connection.textContent =
+      "Connection module not installed";
+
+    dot.style.background =
+      "#ff6577";
+
+  },1500);
+
+}
+
+</script>
+
+</body>
+  </html>
