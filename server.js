@@ -14,13 +14,15 @@ app.get("/api/health", (req, res) => {
 app.get("/api/status", (req, res) => {
   res.json({
     ok: true,
-    service: "JONY Secure System"
+    service: "JONY Secure System",
+    message: "Backend is running"
   });
 });
 
-// Secure device pairing endpoint
 app.post("/api/pair", (req, res) => {
   const { pairingCode, deviceName } = req.body;
+
+  const correctCode = process.env.PAIRING_CODE;
 
   if (!pairingCode || !deviceName) {
     return res.status(400).json({
@@ -29,7 +31,7 @@ app.post("/api/pair", (req, res) => {
     });
   }
 
-  if (pairingCode !== process.env.PAIRING_CODE) {
+  if (!correctCode || pairingCode !== correctCode) {
     return res.status(401).json({
       ok: false,
       message: "Invalid pairing code"
@@ -39,7 +41,7 @@ app.post("/api/pair", (req, res) => {
   res.json({
     ok: true,
     message: "Device paired successfully",
-    deviceName
+    deviceName: deviceName
   });
 });
 
