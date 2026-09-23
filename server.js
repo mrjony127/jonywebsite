@@ -31,7 +31,7 @@ app.post("/api/pair", (req, res) => {
     });
   }
 
-  if (!correctCode || pairingCode !== correctCode) {
+  if (!correctCode || pairingCode.trim() !== correctCode.trim()) {
     return res.status(401).json({
       ok: false,
       message: "Invalid pairing code"
